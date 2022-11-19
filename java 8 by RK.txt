@@ -1,0 +1,1044 @@
+
+ java 8 features:
+``
+ 1.lambda expression
+ 2.functional interfaces
+ 3.default methods/static methods
+ 4.predicates
+ 5.functions
+ 6.::
+ 7.stream api
+ 8.for each 
+ 9.date ane time api
+ ...
+ 
+ lamda expression:
+ ````
+ the main objective of lamda expression is to bring benefits of 
+ functional programming in java.
+ 
+ lamdba expression is just a nameless(anonymous) function
+
+   function doesn't have name,returntype and access modifiers.
+   
+   lambda expression --> anonymous functions or closures.
+   
+   
+  eg:
+  
+	}
+
+     ()-> { Sysout("hello")};
+	 
+	 ()->Sysout("hello");
+	 
+	 
+  eg:
+    public void add(int a, int b){
+	  sysout(a+b);
+	}
+	 
+
+   (int a, int b)->{sop(a+b)}
+   
+   (a,b)->sop(a+b);
+   
+  eg:
+  
+    public String str(String str)
+	{
+	 return str;
+	}
+   
+  (String str) -> return str;
+  
+  (str)->str;
+  
+  
+1.A lambda expression can have zero or more number of arguments.
+
+
+functional interface:
+```
+if an interface contains only one abstract method, such type of interfaces
+are called functional interfaces and the method is called functional method
+or single abstract method(sam).
+
+
+eg:
+Runnable  ->run()
+Comparable-->compareTo()
+ActionListener
+...
+
+from java8 inside interface we also can define default and static methods.
+
+along with these sam based on requirement if we want to keep these default
+and static methods yes we can keep it.
+
+
+functional interface should contain only one abstract method.
+
+eg:
+ @FunctionalInterface
+ interface interf1
+  {
+   public abstract void m1();
+   default void m2(){
+   }
+  }
+  
+example:
+`
+package com.capg.jse.lamdaexpressions;
+
+@FunctionalInterface
+interface  
+{
+	public void m1();
+	
+}
+
+public class Test1
+{
+	public static void main(String[] args) {
+		
+		Interf i = ()->System.out.println("method one");
+		
+		//calling the method
+		i.m1();
+		
+		
+}
+}
+
+example:
+```
+package com.capg.jse.lamdaexpressions;
+
+@FunctionalInterface
+interface Interf
+{
+	public void sum(int a, int b);
+	
+}
+
+public class Test1
+{
+	public static void main(String[] args) {
+		Interf i = (a,b)->System.out.println(a+b);
+		
+		//call the method
+		
+		i.sum(2, 3);
+		
+}
+}
+
+
+example:
+``
+package com.capg.jse.lamdaexpressions;
+
+@FunctionalInterface
+interface Interf
+{
+	public int square(int a);
+	
+}
+
+public class Test1
+{
+	public static void main(String[] args) {
+		Interf i = (a)->a*a;
+		
+		
+		int square = i.square(5);
+		System.out.println("square value is: " + square);
+		
+}
+}
+
+
+
+example without lambda expression:
+````
+package com.capg.jse.lamdaexpressions;
+
+class MyRunnable implements Runnable
+{
+
+	@Override
+	public void run() {
+		for(int i=0;i<10;i++)
+		{
+			System.out.println("child thread");
+		}
+		
+	}
+	
+	
+}
+public class Test2{
+	
+	public static void main(String[] args) {
+		Runnable r = new MyRunnable();
+		Thread t = new Thread(r);
+		//call the start method
+		
+		t.start();
+		
+		for(int i=0;i<10;i++)
+		{
+			System.out.println("main thread");
+		}
+	}
+
+}
+
+
+with lambda expression:
+````
+package com.capg.jse.lamdaexpressions;
+
+public class Test2{
+	
+	public static void main(String[] args) {
+		
+		
+		Runnable r = ()->{
+			
+			for(int i=0;i<10;i++)
+			{
+				System.out.println("child thread");
+			}
+			
+		};
+		
+		
+		
+		//main thread
+		
+		for(int i=0;i<10;i++)
+		{
+			System.out.println("main thread");
+		}
+	}
+
+}
+
+
+default methods:
+```
+the main advantage of default methods is without effecting implementation
+classes we can add new functionality to the interface (backward compatibility).
+
+example:
+``
+package com.capg.jse.lamdaexpressions;
+
+interface interf1
+{
+	default void m1()
+	{
+		System.out.println("default method");
+	}
+}
+public class Test3 implements interf1
+{
+    public void m1()
+	{
+		System.out.println("default method-imp class");
+	}
+	public static void main(String[] args) {
+		
+		Test3 t = new Test3();
+		t.m1();
+		
+	}
+
+}
+
+
+two interfaces can contain default method with same signature then 
+there may be a chance of ambiguity problem to the implementation 
+class.
+
+To overcome this problem,we should override default method in the 
+implementation class otherwise we get compile time error.
+
+example:
+``
+package com.capg.jse.lamdaexpressions;
+
+interface Left
+{
+	default void m1()
+	{
+		System.out.println("left default method");
+	}
+}
+
+interface Right
+{
+	default void m1()
+	{
+		System.out.println("right default method");
+	}
+}
+public class Test4 implements Left,Right{
+	
+	public void m1()
+	{
+		//calling right interface m1()
+		Right.super.m1();
+		//calling left interface m1()
+		Left.super.m1();
+	}
+	
+	public static void main(String[] args) {
+		
+		Test4 obj = new Test4();
+		obj.m1();
+	}
+
+}
+
+
+
+static methods inside interface:
+````
+
+from 1.8 version onwards in addition to default methods we can 
+define static methods also inside interface to define utility functions.
+
+interface static methods by default not available to the implementation clases
+hence by using implementation class reference we can't call the interface
+static methods.
+
+we should class interface static methods by using interface name.
+
+example:
+```
+package com.capg.jse.lamdaexpressions;
+
+interface i1
+{
+	public static void sum(int a, int b)
+	{
+		System.out.println("the sum: " + (a+b));
+	}
+}
+public class Test5 implements i1 
+{
+	public static void main(String[] args) {
+		
+		
+		Test5 obj= new Test5();
+		//compile tiem error: obj.sum(4,4);
+		
+		i1.sum(3, 4);
+		
+	}
+
+}
+
+
+note:
+from jdk 1.8 version onwards , we can define main() inside interface and
+hence we can even run also.
+
+example:
+``
+package com.capg.jse.lamdaexpressions;
+
+public interface i2 {
+	
+	public static void main(String[] args)
+	{
+		System.out.println("hello");
+	}
+
+}
+
+
+lambda expressions with collections:
+``````
+
+
+example with out lambda expression:
+`````
+package com.capg.jse.lamdaexpressions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+class MyComparator implements Comparator<Integer>
+{
+
+	@Override
+	public int compare(Integer i1, Integer i2) {
+		
+		if(i1<i2)
+		{
+			return 9;
+		}
+		else if(i1>i2)
+		{
+			return -9;
+		}
+		else
+		{
+			return 0;
+		}
+		
+	}
+	
+}
+public class Test6 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		l.add(10);
+		l.add(0);
+		l.add(5);
+		l.add(20);
+		
+		
+		System.out.println("before sorting: " + l);
+		Collections.sort(l,new MyComparator());
+		
+		System.out.println("after sorting: " + l);
+		
+	}
+
+}
+
+
+
+
+
+
+example with lambda expression:
+`````
+package com.capg.jse.lamdaexpressions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+public class Test6 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		l.add(10);
+		l.add(0);
+		l.add(5);
+		l.add(20);
+		
+		
+		System.out.println("before sorting: " + l);
+		Collections.sort(l,(i1,i2)->(i1<i2)?-1:(i1>i2)?1:0);
+		
+		System.out.println("after sorting: " + l);
+		
+	}
+
+}
+
+
+assignment:
+``
+do the same kind of program w.r.to TreeSet
+
+
+
+example with TreeMap object:
+`````
+package com.capg.jse.lamdaexpressions;
+
+import java.util.TreeMap;
+
+public class Test7 {
+	
+	public static void main(String[] args) {
+		
+		
+		TreeMap<Integer,String> m = new TreeMap<Integer,String>((i1,i2)->(i1<i2)?1:(i1>i2)?-1:0);
+		
+		m.put(100, "bunny");
+		m.put(600, "sunny");
+		m.put(200, "chinny");
+		m.put(700, "vinny");
+		m.put(400, "pinny");
+		
+		System.out.println(m);
+	
+	}
+
+}
+
+
+example w.r.to user defined object along with lambda expression:
+``````````
+package com.capg.jse.lamdaexpressions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Test8 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<Employee> l = new ArrayList<Employee>();
+		
+		l.add(new Employee(100,"ram"));
+		l.add(new Employee(600,"bunny"));
+		l.add(new Employee(200,"deepika"));
+		l.add(new Employee(400,"sunny"));
+		l.add(new Employee(500,"alia"));
+		l.add(new Employee(300,"mallika"));
+		System.out.println("before sorting");
+		System.out.println(l);
+		
+		Collections.sort(l,(e1,e2)->(e1.empid<e2.empid)?-1:(e1.empid>e2.empid)?1:0);
+		
+		System.out.println("after sorting: ");
+		
+		System.out.println(l);
+		
+	}
+
+}
+
+
+Employee.java:
+````
+package com.capg.jse.lamdaexpressions;
+
+public class Employee {
+	
+	int empid;
+	String empnae;
+	public Employee(int empid, String empnae) {
+		super();
+		this.empid = empid;
+		this.empnae = empnae;
+	}
+	@Override
+	public String toString() {
+		return empid + " " + empnae;
+	}
+	
+	
+
+}
+
+
+Predicate:
+`
+A predicate is a function with a single argument and returns boolean value.
+
+Predicate interface present --> java.util.function 
+
+it is a functional intrface --> test()
+
+
+write a predicate to check whether the given integer is greater than 10 or
+not?
+
+  public boolean test(Integer i)
+  {
+     if(i>10)
+	 {
+	 return true;
+	 }
+	 else{
+	 return false;
+	 }
+  }
+
+-> (i) -> (i>10)
+
+Predicate<Integer>> p = i -> i>10;
+
+
+sysout(p.test(1000));//true
+
+
+
+
+example:
+`
+package com.capg.jse.lamdaexpressions;
+
+import java.util.function.Predicate;
+
+public class Test9 {
+	
+	 public static void main(String[] args) {
+		
+		 
+		 Predicate<Integer> p = i -> i>10;
+		 
+		 System.out.println(p.test(78));
+		 System.out.println(p.test(7));
+	}
+
+}
+
+
+assignment:
+write a predicate to check the length of given string is greater than3 or not?
+
+assignment:
+write a predicate to check whether the given colletion is empty or not?
+
+ 
+Predicate Joining:
+```
+it's possible to join predicates into a single predicate by using
+some methods
+  and()
+  or()
+  negate()
+  
+example:
+```
+package com.capg.jse.lamdaexpressions;
+
+import java.util.function.Predicate;
+
+public class Test10 {
+	
+	public static void main(String[] args) {
+		
+		int[] x = {0,5,10,15,20,25,30};
+		Predicate<Integer> p1 = i->i>10;
+		Predicate<Integer> p2 = i -> i%2==0;
+		System.out.println("the numbers greater than 10");
+		m1(p1,x);
+		System.out.println("the even numbers are ");
+		m1(p2,x);
+		
+		System.out.println("the numbers not greater than 10");
+		m1(p1.negate(),x);
+		
+		System.out.println("the numbers greater than 10 and even numbers:");
+		
+		m1(p1.and(p2),x);
+		
+		System.out.println("the numbers greater than 10 or even numbers");
+		m1(p1.or(p2),x);
+	}
+	
+		public static void m1(Predicate<Integer> p,int[] x)
+		{
+			
+			for(int x1:x)
+			{
+				if(p.test(x1))
+					System.out.println(x1);
+			}
+		
+	}
+
+}
+
+
+assignment:
+``
+define one array string with some values and display the names which starts
+with r by using predicate?
+
+
+
+
+
+
+
+
+pre-defined functional interfaces:
+
+Function
+Consumer
+Supplier
+
+
+Streams:
+``
+To process objects of the collection.
+
+in 1.8 version streams concept introduced.
+
+difference between collection and stream?
+
+ if we want to represent a group of individual objects as a single entity
+ then we should go for collection.
+ 
+ if we want to process a group of objects from the collection then we
+ should go for streams.
+ 
+ we can create a stream object to the collection by using stream() of Collection
+ interface
+ 
+ stream() method is a default method added to the Collection in 1.8 version.
+ 
+ 
+ 
+ ex:  Stream s = c.stream();
+
+
+Stream is an interface present in java.util.stream .
+Once we got the stream,by using that we can process objects
+of that collection.
+
+we can process the objects in 2 phases
+
+   1.configuration
+   
+   2.processing
+   
+   
+ Configuration:
+ ``
+we can configure either by using filter mechanism or by using
+map mechanism.
+
+filterning:
+``
+we can configure a filter to filter elements from the collection 
+based on some boolean condition by using filter() method of 
+Stream interface.
+
+   public Stream filter(Predicate<T> t)
+
+here Predicate can be a bollean valued function/lambda expression
+
+ex:
+  Stream s = c.stream();
+  Stream s1 = s.filter(i->i%2==0);
+
+
+Hence to filter elements of collection based on some boolean condition
+we should go for filter method.
+
+mapping:
+``
+if we want to create a separate new object , for every object present
+in the collectin based on our requirement then we should go for
+map() method of Stream interface.
+
+public Stream map(Function f)
+
+ex:
+    Stream s = c.stream();
+	Stream s1 = s.map(i->i+10);
+
+Once we performed configuration we can process objects by using
+several methods.
+
+collect()
+count()
+sorted()
+min()
+max()
+forEach()
+toArray()
+limit()
+Stream.of()
+...
+
+without streams processing using collect():
+````````
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+
+//without streams
+public class Test1 {
+	
+	public static void main(String[] args) {
+		ArrayList<Integer> l1 = new ArrayList<Integer>();
+		for(int i=0;i<=10;i++)
+		{
+			l1.add(i);
+		}
+		System.out.println(l1);
+		
+		ArrayList<Integer> l2 = new ArrayList<Integer>();
+		
+		for(Integer i: l1)
+		{
+			if(i%2==0)
+				l2.add(i);
+		}
+		System.out.println(l2);
+		
+	}
+
+}
+
+
+using streams processing by collect():
+```````
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+//without streams
+public class Test2 {
+	
+	public static void main(String[] args) {
+		ArrayList<Integer> l1 = new ArrayList<Integer>();
+		for(int i=0;i<=10;i++)
+		{
+			l1.add(i);
+		}
+		System.out.println(l1);
+		
+		List<Integer> l2 = l1.stream().filter(i->i%2==0).collect(Collectors.toList());
+		
+		System.out.println(l2);
+	}
+
+}
+
+
+using map() and collect():
+`````
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Test3 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<String> l = new ArrayList<String>();
+		
+		
+		l.add("rvk");
+		l.add("rk");
+		l.add("rvki");
+		l.add("rvkir");
+		System.out.println(l);
+		
+	    List<String> l2= l.stream().map(s->s.toUpperCase()).collect(Collectors.toList());
+	    System.out.println(l2);
+	}
+
+}
+
+
+processing by count() method:
+````
+this method returns number of elements present in the stream
+   public long count()
+   
+ eg:
+     long count = l.stream().filter(s->s.length()==5).count();
+	 sysout("the number of 5 length string is : " + count);
+	 
+	 
+example:
+``
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Test3 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<String> l = new ArrayList<String>();
+		
+		
+		l.add("rvk");
+		l.add("rk");
+		l.add("rvki");
+		l.add("rvkir");
+		l.add("rams");
+		l.add("baishali");
+		l.add("capgemini");
+		
+		System.out.println(l);
+		
+	    long count = l.stream().filter(s->s.length()>=4).count();
+	    System.out.println("strings lenght which are greater than are equal to 4 is: " + count);
+	}
+
+}
+
+
+processng by sorted() method:
+``````
+sorted()-default natural sorting order
+sorted(Comparator c) -customized sorting order
+
+ex:
+
+ List<String> l3 = l.stream().sorted().collect(Collectors.toList());
+ sop("according to default natural sorting order: " + l3);
+ 
+ 
+ List<String> l4 = l.stream().sorted((s1,s2)->-s1.compareTo(s2)).collect(Collectors.toList());
+ 
+
+example:
+```
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Test3 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<String> l = new ArrayList<String>();
+		
+		
+		l.add("rvk");
+		l.add("rk");
+		l.add("rvki");
+		l.add("rvkir");
+		l.add("rams");
+		l.add("baishali");
+		l.add("capgemini");
+		
+		System.out.println(l);
+		
+	  List<String> l3 = l.stream().sorted().collect(Collectors.toList());
+	  System.out.println("according to default natural sorting order: " + l3);
+	
+	  List<String> l4 = l.stream().sorted((s1,s2)->-s1.compareTo(s2)).collect(Collectors.toList());
+	
+	  System.out.println("according to customized sorting order: " + l4);
+	}
+
+}
+
+
+processing by min() and max():
+````
+min(Comparator c)
+
+ -returns minimum value according to specified comparator
+ 
+max(Comparator c)
+
+ -returns maximum value according to specified comparator
+ 
+ 
+  String min = l.stream().min((s1,s2)-> s1.compareTo(s2)).get();
+
+
+example:
+``
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Test3 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		
+		
+		l.add(20);
+		l.add(45);
+		l.add(5);
+		l.add(56);
+		l.add(78);
+		l.add(345);
+		
+		
+		System.out.println(l);
+		
+	  Integer l3 = l.stream().min((s1,s2)->s1.compareTo(s2)).get();
+	  System.out.println("minimum value is " + l3);
+	
+	  Integer l4 = l.stream().max((s1,s2)->s1.compareTo(s2)).get();
+	  System.out.println("maximum value is " + l4);
+	  
+	}
+
+}
+
+
+forEach() method:
+````
+This method will not return anything
+This method will take lambda expression as argument and apply that
+lambda expression for each element in the stream.
+
+eg: 
+  l.stream().forEach(s ->sop(s));
+  
+
+example:
+``
+package com.capg.jse.streams_util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Test3 {
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		
+		
+		l.add(20);
+		l.add(45);
+		l.add(5);
+		l.add(56);
+		l.add(78);
+		l.add(345);
+		
+		System.out.println("using for each loop");
+		for(Integer i:l)
+		{
+			System.out.println(i);
+		}
+		
+		System.out.println("using stream interface foreach loop");
+		l.stream().forEach(i->System.out.println(i));
+	  
+	}
+
+}
+
+refer once:
+``
+
+toArray()
+Stream.of()
+limit()
+
+-refer method reference(::) or constructor reference 

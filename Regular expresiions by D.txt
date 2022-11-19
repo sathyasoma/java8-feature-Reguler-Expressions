@@ -1,0 +1,525 @@
+
+
+
+
+
+Regular Expressions:
+====================
+
+1.Regular Expressions
+2.Matcher
+3.Pttern
+4.Charecter Class
+5.Pre-defined charecter classes
+6.Quantifiers
+7.Pattern class split()
+8.String class Split()
+9.StringTokenizer
+
+
+If We want tp represent a group of Strings according to a particular Pattern, then 
+we sholud go for Regular expression.
+
+eg1: We can write a regular expression to represent All Mobile Numbers
+eg2: We can write a regular expression to represent All Mail id's.
+
+
+The main Advantages Application Areas of Regular Expressions are.
+==============================================================
+
+=>To develope validation framework
+=>To develop pattern matching applications(cntrl+f in windows, grep in UNIX)
+=>tO develop Translators like Compilers, interpriters and Assembles
+=>To develop digital circuits Like moore and melay Machines.
+=>To develop Communication protocols Like TCP/IP, UDP ETC... 
+
+
+Pattern:
+=========
+A pattern object represent  a compiled version of Regulaer expression
+We can create  a pattern object  by using " compile()" pf pattern class
+    
+	 
+	   public static Pattern  compile(String Regular Expressions);
+	   
+ How to create Pattern Object?
+         Pattern p= Pattern.compile("ab");
+
+Matcher:
+=======
+We can use Matcher Object to match the given Pattern in the target String .
+We Can create  Matcher Object by using "matcher()" of pattern class.
+
+          public Matcher 	matcher(String target);
+		  
+ How to create Matcher Object?
+ 
+     Matcher m= p.matcher("ababbabab");
+
+
+Methods of Matcher Class:
+========================
+1. public boolean find();
+  
+    It attempts to find next match and returns true if it is available. Otherwise retuns flase
+
+2.public int start();
+ 
+   Returns start index of the match
+
+3.public int end();
+
+    returns end +1  index of match 
+
+4.public string group();
+
+    returns the Matched Pattern
+	
+Note:
+=====
+these clsases present in java.util,regex, and came in 1.4v
+     
+
+
+EG:
+----
+class RegExDemo{
+
+public static void main(String args[]){
+
+             int   count=0;   //to count how many itertions
+			 
+           Pattern p = Pattern.compile("ab");    //pattern/Re
+		   
+		   Matcher m= p.matcher("ababbabab");
+		   
+		   while(m.find())
+		   {
+		      count++;
+		   System.out.println(m.start());
+		   }
+		   System.out.println("The number of occurences are:"+count);
+}
+}
+
+eg1:
+====
+
+
+package com.kt.regEx;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class RegExDemo1 {
+
+public static void main(String args[]){
+
+             int   count=0;   //to count how many itertions
+			 
+           Pattern p = Pattern.compile("ab");    //pattern/Re
+		   
+		   Matcher m= p.matcher("ababbabab");
+		   
+		   while(m.find())
+		   {
+		      count++;
+		   System.out.println(m.start()+"  "+m.end()+"   "+m.group());
+		     //start() method will return start index
+		   //end()-> method will return end index: +1 value  return=>
+		   //group()-->method will return group values wich matched
+		   }
+		   System.out.println("The number of occurences are:"+count);
+}
+}
+
+
+Charecter Classes:
+====================
+
+[abc]---->Either a or b or c
+
+[^abc]--->Except a, b ,c
+
+[a-z]----->Any lower case alphabe symbol
+
+[A-Z]---->Any Uppercse Symbol
+
+[0-9]-->any digit from 0 to 9
+
+[a-z A-Z]-->any aplphabet symbol
+
+[a-z A-Z 0-9]--->any aplphanumeric symbols
+
+[^a-z A-Z 0-9]---->Except aplha numeric
+
+
+eg:
+====
+
+class RegExDemo{
+
+public static void main(String args[]){
+
+			 
+           Pattern p = Pattern.compile("[abc]");  
+		   
+		   Matcher m= p.matcher("a7b@z#9");
+		   
+		   while(m.find())
+		   {
+		   
+		   System.out.println(m.start());
+		   }
+		   
+}
+}
+
+
+
+
+Pre-defined Charecter Classes:
+------------------------------
+\s==treat escape charecter thats we add extra slash
+
+
+
+
+\s    =>space charecter     -**if u want use it use \\s
+
+\S    =>any charecter except space \\S
+
+
+\d    =>any digit from 0-9     \\d
+
+\D     =>any charecter except digit   \\D
+
+\w     =>any word charecter(any alphanumeric)   \\w
+
+\W     =>except word charecter(special charecter)   \\W
+
+.     =>any symbol special char also
+
+
+
+eg:
+==
+
+class RegExDemo{
+
+public static void main(String args[]){
+
+			 
+           Pattern p = Pattern.compile("x");    //x=\\s, \S, \w
+		   
+		   Matcher m= p.matcher("a7 z#9");
+		   
+		   while(m.find())
+		   {
+		   
+		   System.out.println(m.start());
+		   }
+		   
+}
+}
+
+Quantifiers:
+============
+we can use to specify no of occurences to match.
+
+a----->means --.match a only
+
+a+--->means-->match num od aa'sholud(at least 1 a, )
+
+a*--->means-->any number of a's includs "Zero" number also.
+
+a?---->means-->atmost 1 a 
+
+class RegExDemo{
+
+public static void main(String args[]){
+
+			 
+           Pattern p = Pattern.compile("a+"); 
+		   
+		   Matcher m= p.matcher("abaadaaaj");
+		   
+		   while(m.find())
+		   {
+		   
+		   System.out.println(m.start()+" "+m.group());
+		   }
+		   
+}
+}
+
+
+pattern class split() method:
+================================================:
+
+
+class RegExDemo{
+
+public static void main(String args[]){
+
+			 
+           Pattern p = Pattern.compile("\\s"); 
+		   
+		   String [] s= p.split("soma sathya prakash");
+		   
+		   for(String s1:s)
+		   {
+		   
+		   System.out.println(s1);
+		   }
+		   
+}
+}
+
+eg:
+----: split except "a" in given token
+
+
+
+class RegExDemo{
+
+public static void main(String args[]){
+
+			 
+           Pattern p = Pattern.compile("a"); 
+		   
+		   String [] s= p.split("soma sathya prakash");
+		   
+		   for(String s1:s)
+		   {
+		   
+		   System.out.println(s1);
+		   }
+		   
+}
+}
+
+
+o/p:  som
+      s
+	  thy 
+	  pr
+	  k
+	  sh
+	  
+	  
+
+
+
+eg:
+====
+
+
+class RegExDemo{
+
+public static void main(String args[]){
+
+			 
+           Pattern p = Pattern.compile(".");  //dont use .  ==>**use \\.  or [.]
+		   
+		   String [] s= p.split("www.sathya1.com");
+		   
+		   for(String s1:s)
+		   {
+		   
+		   System.out.println(s1);
+		   }
+		   
+}
+}
+
+**Here . will not work same as split,
+
+
+
+String class also have the split method:
+=======================================
+
+
+String s="soma sathya prakash";
+
+String s1[]=s.split("\\s");
+
+for(String s2:s1){
+  System.out.println(s2);
+}
+
+**string class "split " method can take pattern as argument. whereas 
+                          pattern class "split" method can take as string as "argument".
+						  
+						  
+				
+
+StringTokenizer:
+===========
+it is specially designed for the Tokenization Activity
+This class present in java.util package
+
+
+StringTokenizer st= new StringTokenizer("Durga software solutions");
+
+    while(st.hashMoreTokens()){
+	
+	    System.ou.println(st.nextToken());
+	}
+
+
+Note:
+=====
+
+the defalut regular expression stringtokenizer  is "Space"
+
+StringTokenizer st= new StringTokenizer("03-06-1982","-");
+
+    while(st.hashMoreTokens()){
+	
+	    System.ou.println(st.nextToken());
+	}
+
+
+
+
+
+=======
+
+Write a regular expression to represent all 10 digit mobile numbers.
+
+
+Rules:
+=====
+
+Every number should contain exactly 10 digits
+
+the first digit should be 7 or 8 or 9
+
+  
+                  [7-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+				 
+				                  (or)
+								  
+				              [7-9][0-9]{9}				  
+                                 
+								   (or)
+								   
+						      [789][0-9]{9}
+
+
+==>
+10 digit or 11 digit
+
+                   if the number contains 11 digits then the first digit should be 0
+				   
+				   0?[7-9][0-9]{9}
+				   
+==>
+10 digit or 11 digit or 12 digit
+
+					if the number contains 12 digits then the first two digts should be 91
+					
+					
+					              (0|91)?[7-9][0-9]{9}
+					      
+
+==>
+write  a Regular expression to rpresent  all valid mail id's.
+
+    [a-zA-Z0-9][a-zA-Z0-9_.]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+
+	
+	
+	==>onLY Gmail id's
+	
+	    [a-zA-Z0-9][a-zA-Z0-9_.]*@gmail[.]com
+		
+		
+		
+		
+==>
+write a regular expression to represent all "Yava" language identifiers
+
+ Rules:
+ =====
+ The allowed charecters are 	a-z,A-Z,0-9,#, $
+ The length of identifier is atleast 2
+ the 1st charecter sholud be lower case alphabetical symbol from a to k
+ the 2nd charecter should be digit Divisble by 3 (0,3,6,9)
+ 
+              [a-k][0369][]a-zA-Z0-9#$]*
+			  
+=>To represent all names start with  a|A
+              
+			        [aA][a-zA-Z]*
+					
+=>To REPRESENT ALL NAMES ENDS WITH I OR L
+
+                [a-zA-Z]*[IL]
+
+=>TO REPRESENT ALL NAME STARTS WITH a|A ends with I OR L
+
+                 [aA][a-zA-Z]*[IL]
+				 
+	
+
+
+    
+=====>>>
+check weather mobile number is valid or not?
+
+
+
+class Test{
+  public static vpid main(String args[]){
+  
+      Pattern p= Pattern.compile("(0|91)?[7-9][0-9]{9}");
+	  
+	  Matcher m= p.marcher(args[0]);
+	  
+	  if(m.find() && m.group().equals(args[0]))
+	  {
+	    System.out.println("valid mobile number");
+	  }
+      else
+	  {
+	     System.out.println("invalid mobile number");
+	  }
+  
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

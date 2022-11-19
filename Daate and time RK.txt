@@ -1,0 +1,190 @@
+Date and time:
+================
+until java 1.7 version the classes present in java.util package  to handle Daate and Time are not up to
+the  mark with respect to covienecnce and performanace.
+
+
+To overcome this problem in 1.8 oracle people introduced in joda. time api  (jod- org)
+
+
+this api developed by joda api and availble in java.Time  package
+
+
+public class Tes{
+
+public static void main(String args[]){
+
+
+LocalDate date= LocalDate.now();
+
+System.out.println(date);
+
+LocalTime time= LocalTime.now();
+System.out.println(time);
+
+}
+
+}
+
+o/p:  sytem date: 07-07-2021
+       systm time: 06:19 am
+	   
+	   
+eg:
+===
+
+
+
+public class Tes{
+
+public static void main(String args[]){
+
+
+LocalDate date= LocalDate.now();
+
+System.out.println(date);
+
+int dd=date.getDayOfMonth();
+int mm=date.getMonthValue();
+int yy=date.getYear();
+
+
+System.out.println(dd+" "+mm+" "+yy);
+//other way to display
+
+Stystem.out.printf("\n%d-%d-%d",dd,mm,yy);
+
+}
+
+}
+
+
+Note:
+=====
+if we want to define both time and date the  we should go for LocalDataTime object.
+
+
+LocalDataTime dt= LocalDataTime.now();
+
+
+
+eg:
+==
+
+
+public class Tes{
+
+public static void main(String args[]){
+
+
+LocalDataTime dt= LocalDataTime.now();
+
+Sytem.out.println(dt);
+
+
+LocalDateTime dt1= LocalDatETime.of(1994,Month.June,04,01,25);
+System.out.println(dt1);
+
+//want to disply after 6 mnths
+
+System.out.println("after six months:"+dt1.plusMonths(6));
+
+//before six months
+
+System.out.println("before six months:"+dt1.minusMonths(6));
+
+}}
+
+
+
+
+
+ZoneId:
+------
+this object can be used to represent Zone.
+
+
+eg:
+====
+
+public class Tes{
+
+public static void main(String args[]){
+
+
+//system default zone
+
+ZoneId zone= ZoneId.systemDefault();
+
+System.out.println(zone);
+
+// if we want to use perticuler zone we can
+
+ZoneId la= ZoneId.of("America/Los_Angels");
+
+ZonedDateTime Zt= ZonedDateTime.now(la);
+
+System.out.println(zt);
+
+
+
+}
+}
+
+find age:
+=========
+
+eg:
+---
+
+public class Tes{
+
+public static void main(String args[]){
+
+
+LocalDate today=Localate.now();
+
+
+LocalDate birthdy= LocalDate.of(1994,06,04);
+
+//we have to use period class
+
+Period p= Period.between(birthdy,today);
+
+Sytem.out.println("age is %d year %d months %days",p.getyear,p.getMonths(),p.getDate());
+
+
+ 
+}
+}
+
+leap year or not:
+====================
+
+eg:
+---
+
+public class Tes{
+
+public static void main(String args[]){
+
+int n= Integer.ParseInt(args[0]);
+
+year y= year.of(n);
+if(y.isLeap())
+{
+System.out.printf("%d is leap year "+n)
+}else
+{
+System.out.printf("%d is not leap year"+n )
+}
+
+
+
+
+}}
+
+
+
+
+
